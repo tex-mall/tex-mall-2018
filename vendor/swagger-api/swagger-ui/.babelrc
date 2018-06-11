@@ -6,7 +6,6 @@
   ],
   "plugins": [
     "transform-runtime",
-    "babel-plugin-transform-es2015-constants",
     [
       "module-alias",
       [

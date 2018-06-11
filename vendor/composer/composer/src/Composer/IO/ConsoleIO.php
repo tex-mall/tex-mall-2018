@@ -291,10 +291,6 @@ class ConsoleIO extends BaseIO
 
         $result = $helper->ask($this->input, $this->getErrorOutput(), $question);
 
-        if (!is_array($result)) {
-            return (string) array_search($result, $choices, true);
-        }
-
         $results = array();
         foreach ($choices as $index => $choice) {
             if (in_array($choice, $result, true)) {

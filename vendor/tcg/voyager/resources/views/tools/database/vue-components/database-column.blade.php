@@ -13,7 +13,7 @@
     </td>
 
     <td>
-        <input v-model.number="column.length" :type="lengthInputType" min="0">
+        <input v-model.number="column.length" type="number" min="0">
     </td>
 
     <td>
@@ -31,13 +31,13 @@
     <td>
         <select :value="index.type" @change="onIndexTypeChange"
                 :disabled="column.type.notSupportIndex"
-                class="form-control">
+                class="form-control" tabindex="-1">
             <option value=""></option>
-            <option value="INDEX">{{ __('voyager::database.index') }}</option>
-            <option value="UNIQUE">{{ __('voyager::database.unique') }}</option>
-            <option value="PRIMARY">{{ __('voyager::database.primary') }}</option>
+            <option value="INDEX">{{ __('voyager.database.index') }}</option>
+            <option value="UNIQUE">{{ __('voyager.database.unique') }}</option>
+            <option value="PRIMARY">{{ __('voyager.database.primary') }}</option>
         </select>
-        <small v-if="column.composite" v-once>{{ __('voyager::database.composite_warning') }}</small>
+        <small v-if="column.composite" v-once>{{ __('voyager.database.composite_warning') }}</small>
     </td>
 
     <td>
@@ -57,11 +57,6 @@
 
 <script>
     Vue.component('database-column', {
-        data: function() {
-            return {
-                lengthInputType: 'number'
-            }
-        },
         props: {
             column: {
                 type: Object,
@@ -96,12 +91,10 @@
                 this.column.default = null;
 
                 this.column.type = type;
-
-                this.setLengthInputType();
             },
             onIndexTypeChange(event) {
                 if (this.column.name == '') {
-                    return toastr.error("{{ __('voyager::database.name_warning') }}");
+                    return toastr.error("{{ __('voyager.database.name_warning') }}");
                 }
 
                 return this.$emit('indexChanged', {
@@ -109,18 +102,7 @@
                     old: this.index,
                     newType: event.target.value
                 });
-            },
-            setLengthInputType() {
-                var name = this.column.type.name;
-                if (name == 'double' || name == 'float' || name == 'decimal') {
-                    this.lengthInputType = 'text';
-                } else {
-                    this.lengthInputType = 'number';
-                }
             }
-        },
-        mounted() {
-            this.setLengthInputType();
-        },
+        }
     });
 </script>

@@ -51,12 +51,9 @@ export default class Models extends Component {
       </h4>
       <Collapse isOpened={showModels}>
         {
-          definitions.entrySeq().map(([name])=>{
+          definitions.entrySeq().map( ( [ name ])=>{
 
-            const fullPath = [...specPathBase, name]
-            const schema = specSelectors.specResolvedSubtree(fullPath)|| Im.Map()
-            const rawSchema = specSelectors.specJson().getIn(fullPath, Im.Map())
-            const displayName = schema.get("title") || rawSchema.get("title") || name
+            const schema = specSelectors.specResolvedSubtree([...specPathBase, name])
 
             if(layoutSelectors.isShown(["models", name], false) && schema === undefined) {
               // Firing an action in a container render is not great,
@@ -66,8 +63,7 @@ export default class Models extends Component {
 
             const content = <ModelWrapper name={ name }
               expandDepth={ defaultModelsExpandDepth }
-              schema={ schema || Im.Map() }
-              displayName={displayName}
+              schema={ schema }
               specPath={Im.List([...specPathBase, name])}
               getComponent={ getComponent }
               specSelectors={ specSelectors }
@@ -76,9 +72,7 @@ export default class Models extends Component {
               layoutActions = {layoutActions}/>
 
             const title = <span className="model-box">
-              <span className="model model-title">
-                {displayName}
-              </span>
+              <span className="model model-title">{name}</span>
             </span>
 
             return <div id={ `model-${name}` } className="model-container" key={ `models-section-${name}` }>
@@ -87,7 +81,6 @@ export default class Models extends Component {
                 collapsedContent={this.getCollapsedContent(name)}
                 onToggle={this.handleToggle}
                 title={title}
-                displayName={displayName}
                 modelName={name}
                 hideSelfOnExpand={true}
                 expanded={defaultModelsExpandDepth > 1}

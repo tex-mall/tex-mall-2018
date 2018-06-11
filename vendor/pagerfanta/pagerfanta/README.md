@@ -32,8 +32,6 @@ $pagerfanta->hasPreviousPage();
 $pagerfanta->getPreviousPage();
 $pagerfanta->hasNextPage();
 $pagerfanta->getNextPage();
-$pagerfanta->getCurrentPageOffsetStart();
-$pagerfanta->getCurrentPageOffsetEnd();
 ```
 
 The `->setMaxPerPage()` and `->setCurrentPage()` methods implement
@@ -66,9 +64,6 @@ All of them extend from `Pagerfanta\Exception\NotValidCurrentPageException`.
 `->setCurrentPage()` throws an out ot range exception depending on the
 max per page, so if you are going to modify the max per page, you should do it
 before setting the current page.
-
-(If you want to use Pagerfanta in a Symfony project, see
-[https://github.com/whiteoctober/WhiteOctoberPagerfantaBundle](https://github.com/whiteoctober/WhiteOctoberPagerfantaBundle).)
 
 ## Adapters
 
@@ -268,7 +263,7 @@ $adapter = new DoctrineSelectableAdapter($comments, $criteria);
 Note that you should never use this adapter with a
 PersistentCollection which is not set to use the EXTRA_LAZY fetch mode.
 
-*Be careful when using the `count()` method, currently Doctrine2
+*Be carefull when using the `count()` method, currently Doctrine2
 needs to fetch all the records to count the number of elements.*
 
 ### ElasticaAdapter
@@ -348,19 +343,6 @@ $nbResults = 5;
 $results = array(/* ... */);
 
 $adapter = new FixedAdapter($nbResults, $results);
-```
-
-### ConcatenationAdapter
-
-Concatenates the results of other adapter instances into a single adapter.
-It keeps the order of sub adapters and the order of their results.
-
-```php
-<?php
-
-use Pagerfanta\Adapter\ConcatenationAdapter;
-
-$superAdapter = new ConcatenationAdapter(array($adapter1, $adapter2 /* ... */));
 ```
 
 ## Views
@@ -583,15 +565,6 @@ $pagerfantaHtml = $myView2->render($pagerfanta, $routeGenerator);
 // overwriting default options
 $pagerfantaHtml = $myView2->render($pagerfanta, $routeGenerator, array('next_message' => 'Siguiente!!'));
 ```
-
-## Contributing
-
-We welcome contributions to this project, including pull requests and issues (and discussions on existing issues).
-
-If you'd like to contribute code but aren't sure what, the [issues list](https://github.com/whiteoctober/pagerfanta/issues) is a good place to start.
-If you're a first-time code contributor, you may find Github's guide to [forking projects](https://guides.github.com/activities/forking/) helpful.
-
-All contributors (whether contributing code, involved in issue discussions, or involved in any other way) must abide by our [code of conduct](code_of_conduct.md).
 
 ## Acknowledgements
 

@@ -28,16 +28,15 @@ class AddBreadMenuItem
      */
     public function handle(BreadAdded $bread)
     {
-        if (config('voyager.bread.add_menu_item') && file_exists(base_path('routes/web.php'))) {
+        if (config('voyager.add_bread_menu_item') && file_exists(base_path('routes/web.php'))) {
             require base_path('routes/web.php');
 
-            $menu = Menu::where('name', config('voyager.bread.default_menu'))->firstOrFail();
+            $menu = Menu::where('name', 'admin')->firstOrFail();
 
             $menuItem = MenuItem::firstOrNew([
                 'menu_id' => $menu->id,
                 'title'   => $bread->dataType->display_name_plural,
-                'url'     => '',
-                'route'   => 'voyager.'.$bread->dataType->slug.'.index',
+                'url'     => '/'.config('voyager.prefix', 'admin').'/'.$bread->dataType->slug,
             ]);
 
             $order = Voyager::model('MenuItem')->highestOrderMenuItem();

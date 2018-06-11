@@ -14,11 +14,7 @@ class Role extends Model
 
     public function users()
     {
-        $userModel = Voyager::modelClass('User');
-
-        return $this->belongsToMany($userModel, 'user_roles')
-                    ->select(app($userModel)->getTable().'.*')
-                    ->union($this->hasMany($userModel))->getQuery();
+        return $this->hasMany(Voyager::modelClass('User'));
     }
 
     public function permissions()

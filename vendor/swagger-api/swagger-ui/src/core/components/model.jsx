@@ -10,7 +10,6 @@ export default class Model extends ImmutablePureComponent {
     getConfigs: PropTypes.func.isRequired,
     specSelectors: PropTypes.object.isRequired,
     name: PropTypes.string,
-    displayName: PropTypes.string,
     isRef: PropTypes.bool,
     required: PropTypes.bool,
     expandDepth: PropTypes.number,
@@ -34,7 +33,7 @@ export default class Model extends ImmutablePureComponent {
   }
 
   render () {
-    let { getComponent, getConfigs, specSelectors, schema, required, name, isRef, specPath, displayName } = this.props
+    let { getComponent, getConfigs, specSelectors, schema, required, name, isRef, specPath } = this.props
     const ObjectModel = getComponent("ObjectModel")
     const ArrayModel = getComponent("ArrayModel")
     const PrimitiveModel = getComponent("PrimitiveModel")
@@ -52,7 +51,7 @@ export default class Model extends ImmutablePureComponent {
 
     if(!schema) {
       return <span className="model model-title">
-              <span className="model-title__text">{ displayName || name }</span>
+              <span className="model-title__text">{ name }</span>
               <img src={require("core/../img/rolling-load.svg")} height={"20px"} width={"20px"} style={{
                   marginLeft: "1em",
                   position: "relative",

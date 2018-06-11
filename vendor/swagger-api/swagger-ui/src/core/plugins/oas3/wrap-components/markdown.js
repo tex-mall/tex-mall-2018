@@ -1,12 +1,11 @@
 import React from "react"
 import PropTypes from "prop-types"
 import ReactMarkdown from "react-markdown"
-import cx from "classnames"
 import { Parser, HtmlRenderer } from "commonmark"
 import { OAS3ComponentWrapFactory } from "../helpers"
 import { sanitizer } from "core/components/providers/markdown"
 
-export const Markdown = ({ source, className = "" }) => {
+export const Markdown = ({ source }) => { 
   if ( source ) {
     const parser = new Parser()
     const writer = new HtmlRenderer()
@@ -20,15 +19,14 @@ export const Markdown = ({ source, className = "" }) => {
     return (
       <ReactMarkdown
         source={sanitized}
-        className={cx(className, "renderedMarkdown")}
+        className={"renderedMarkdown"}
       />
     )
   }
   return null
 }
 Markdown.propTypes = {
-  source: PropTypes.string,
-  className: PropTypes.string,
+  source: PropTypes.string
 }
 
 export default OAS3ComponentWrapFactory(Markdown)

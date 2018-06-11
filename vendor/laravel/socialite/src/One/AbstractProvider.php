@@ -41,7 +41,7 @@ abstract class AbstractProvider implements ProviderContract
     /**
      * Redirect the user to the authentication page for the provider.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function redirect()
     {

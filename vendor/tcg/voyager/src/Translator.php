@@ -4,7 +4,7 @@ namespace TCG\Voyager;
 
 use ArrayAccess;
 use Illuminate\Database\Eloquent\Model;
-use TCG\Voyager\Facades\Voyager as VoyagerFacade;
+use TCG\Voyager\Models\Translation;
 
 class Translator implements ArrayAccess
 {
@@ -59,7 +59,7 @@ class Translator implements ArrayAccess
             if ($attribute['exists']) {
                 $translation = $this->getTranslationModel($key);
             } else {
-                $translation = VoyagerFacade::model('Translation')->where('table_name', $this->model->getTable())
+                $translation = Translation::where('table_name', $this->model->getTable())
                     ->where('column_name', $key)
                     ->where('foreign_key', $this->model->getKey())
                     ->where('locale', $this->locale)
@@ -67,7 +67,7 @@ class Translator implements ArrayAccess
             }
 
             if (is_null($translation)) {
-                $translation = VoyagerFacade::model('Translation');
+                $translation = new Translation();
             }
 
             $translation->fill([
@@ -234,7 +234,7 @@ class Translator implements ArrayAccess
             return false;
         }
 
-        $translation = VoyagerFacade::model('Translation');
+        $translation = new Translation();
         $translation->fill([
             'table_name'  => $this->model->getTable(),
             'column_name' => $key,
@@ -275,7 +275,7 @@ class Translator implements ArrayAccess
         $translations = $this->model->getRelation('translations');
         $locale = $this->locale;
 
-        VoyagerFacade::model('Translation')->where('table_name', $this->model->getTable())
+        Translation::where('table_name', $this->model->getTable())
             ->where('column_name', $key)
             ->where('foreign_key', $this->model->getKey())
             ->where('locale', $locale)

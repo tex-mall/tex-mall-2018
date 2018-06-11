@@ -21,7 +21,6 @@ export default class StandaloneLayout extends React.Component {
     let Container = getComponent("Container")
     let Row = getComponent("Row")
     let Col = getComponent("Col")
-    let Errors = getComponent("errors", true)
 
     const Topbar = getComponent("Topbar", true)
     const BaseLayout = getComponent("BaseLayout", true)
@@ -46,8 +45,8 @@ export default class StandaloneLayout extends React.Component {
           <div className="info">
             <div className="loading-container">
               <h4 className="title">Failed to load API definition.</h4>
-              <Errors/>
-            </div>
+              <p>{lastErrMsg}</p>
+            </div>            
           </div>
         }
         { loadingStatus === "failedConfig" &&

@@ -4,7 +4,7 @@ namespace TCG\Voyager\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use TCG\Voyager\Facades\Voyager;
+use TCG\Voyager\Models\Translation;
 use TCG\Voyager\Translator;
 
 trait Translatable
@@ -30,7 +30,7 @@ trait Translatable
      */
     public function translations()
     {
-        return $this->hasMany(Voyager::model('Translation'), 'foreign_key', $this->getKeyName())
+        return $this->hasMany(Translation::class, 'foreign_key', $this->getKeyName())
             ->where('table_name', $this->getTable())
             ->whereIn('locale', config('voyager.multilingual.locales', []));
     }
@@ -54,13 +54,11 @@ trait Translatable
         }
 
         $query->with(['translations' => function (Relation $query) use ($locale, $fallback) {
-            $query->where(function ($q) use ($locale, $fallback) {
-                $q->where('locale', $locale);
+            $query->where('locale', $locale);
 
-                if ($fallback !== false) {
-                    $q->orWhere('locale', $fallback);
-                }
-            });
+            if ($fallback !== false) {
+                $query->orWhere('locale', $fallback);
+            }
         }]);
     }
 
@@ -87,17 +85,15 @@ trait Translatable
                 return;
             }
 
-            $query->where(function ($q) use ($locales, $fallback) {
-                if (is_array($locales)) {
-                    $q->whereIn('locale', $locales);
-                } else {
-                    $q->where('locale', $locales);
-                }
+            if (is_array($locales)) {
+                $query->whereIn('locale', $locales);
+            } else {
+                $query->where('locale', $locales);
+            }
 
-                if ($fallback !== false) {
-                    $q->orWhere('locale', $fallback);
-                }
-            });
+            if ($fallback !== false) {
+                $query->orWhere('locale', $fallback);
+            }
         }]);
     }
 

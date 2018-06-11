@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ config('app.locale') }}" @if (config('voyager.multilingual.rtl')) dir="rtl" @endif>
+<html lang="{{ app()->getLocale() }}">
 <head>
     <title>@yield('page_title', setting('admin.title') . " - " . setting('admin.description'))</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,10 +17,6 @@
     <link rel="stylesheet" href="{{ voyager_asset('css/app.css') }}">
 
     @yield('css')
-    @if(config('voyager.multilingual.rtl'))
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-rtl.css">
-        <link rel="stylesheet" href="{{ voyager_asset('css/rtl.css') }}">
-    @endif
 
     <!-- Few Dynamic Styles -->
     <style type="text/css">
@@ -58,10 +54,9 @@
 </div>
 
 <?php
-if (starts_with(Auth::user()->avatar, 'http://') || starts_with(Auth::user()->avatar, 'https://')) {
+$user_avatar = Voyager::image(Auth::user()->avatar);
+if ((substr(Auth::user()->avatar, 0, 7) == 'http://') || (substr(Auth::user()->avatar, 0, 8) == 'https://')) {
     $user_avatar = Auth::user()->avatar;
-} else {
-    $user_avatar = Voyager::image(Auth::user()->avatar);
 }
 ?>
 

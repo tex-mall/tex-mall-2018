@@ -2,11 +2,9 @@
 
 namespace Arrilot\Widgets\Test\Support;
 
-use Arrilot\Widgets\AbstractWidget;
 use Arrilot\Widgets\Contracts\ApplicationWrapperContract;
 use Arrilot\Widgets\Factories\AsyncWidgetFactory;
 use Arrilot\Widgets\Factories\WidgetFactory;
-use Illuminate\Container\Container;
 use Closure;
 use Doctrine\Instantiator\Exception\InvalidArgumentException;
 
@@ -97,12 +95,6 @@ class TestApplicationWrapper implements ApplicationWrapperContract
 
         if ($abstract == 'encrypter') {
             return new TestEncrypter();
-        }
-
-        if (is_subclass_of($abstract, AbstractWidget::class)) {
-            $app = Container::getInstance();
-
-            return $app->make($abstract, $parameters);
         }
 
         throw new InvalidArgumentException("Binding {$abstract} cannot be resolved while testing");

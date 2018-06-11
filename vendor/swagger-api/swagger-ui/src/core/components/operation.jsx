@@ -72,7 +72,6 @@ export default class Operation extends PureComponent {
       tag,
       showSummary,
       operationId,
-      originalOperationId,
       allowTryItOut,
       displayOperationId,
       displayRequestDuration,
@@ -141,7 +140,7 @@ export default class Operation extends PureComponent {
                 </div>
             }
 
-            { displayOperationId && (originalOperationId || operationId) ? <span className="opblock-summary-operation-id">{originalOperationId || operationId}</span> : null } 
+            { displayOperationId && operationId ? <span className="opblock-summary-operation-id">{operationId}</span> : null }
 
             {
               (!security || !security.count()) ? null :

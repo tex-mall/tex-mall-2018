@@ -114,14 +114,10 @@ EOT
         $io->writeError('<info>scripts:</info>');
         $table = array();
         foreach ($scripts as $name => $script) {
+            $cmd = $this->getApplication()->find($name);
             $description = '';
-            try {
-                $cmd = $this->getApplication()->find($name);
-                if ($cmd instanceof ScriptAliasCommand) {
-                    $description = $cmd->getDescription();
-                }
-            } catch (\Symfony\Component\Console\Exception\CommandNotFoundException $e) {
-                // ignore scripts that have no command associated, like native Composer script listeners
+            if ($cmd instanceof ScriptAliasCommand) {
+                $description = $cmd->getDescription();
             }
             $table[] = array('  '.$name, $description);
         }

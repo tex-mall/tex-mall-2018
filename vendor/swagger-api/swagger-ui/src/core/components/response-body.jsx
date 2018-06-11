@@ -5,10 +5,7 @@ import lowerCase from "lodash/lowerCase"
 import { extractFileNameFromContentDispositionHeader } from "core/utils"
 import win from "core/window"
 
-export default class ResponseBody extends React.PureComponent {
-  state = {
-    parsedContent: null
-  }
+export default class ResponseBody extends React.Component {
 
   static propTypes = {
     content: PropTypes.any.isRequired,
@@ -18,41 +15,9 @@ export default class ResponseBody extends React.PureComponent {
     url: PropTypes.string
   }
 
-  updateParsedContent = (prevContent) => {
-    const { content } = this.props
-
-    if(prevContent === content) {
-      return
-    }
-
-    if(content && content instanceof Blob) {
-      var reader = new FileReader()
-      reader.onload = () => {
-        this.setState({
-          parsedContent: reader.result
-        })
-      }
-      reader.readAsText(content)
-    } else {
-      this.setState({
-        parsedContent: content.toString()
-      })
-    }
-  }
-
-  componentDidMount() {
-    this.updateParsedContent(null)
-  }
-
-  componentDidUpdate(prevProps) {
-    this.updateParsedContent(prevProps.content)
-  }
-
   render() {
     let { content, contentType, url, headers={}, getComponent } = this.props
-    const { parsedContent } = this.state
     const HighlightCode = getComponent("highlightCode")
-    const downloadName = "response_" + new Date().getTime()
     let body, bodyEl
     url = url || ""
 
@@ -64,7 +29,9 @@ export default class ResponseBody extends React.PureComponent {
       (headers["content-description"] && (/File Transfer/i).test(headers["content-description"]))) {
       // Download
 
-      if ("Blob" in window) {
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+
+      if (!isSafari && "Blob" in window) {
         let type = contentType || "text/html"
         let blob = (content instanceof Blob) ? content : new Blob([content], {type: type})
         let href = window.URL.createObjectURL(blob)
@@ -99,7 +66,7 @@ export default class ResponseBody extends React.PureComponent {
         body = "can't parse JSON.  Raw result:\n\n" + content
       }
 
-      bodyEl = <HighlightCode downloadable fileName={`${downloadName}.json`} value={ body } />
+      bodyEl = <HighlightCode value={ body } />
 
       // XML
     } else if (/xml/i.test(contentType)) {
@@ -107,11 +74,11 @@ export default class ResponseBody extends React.PureComponent {
         textNodesOnSameLine: true,
         indentor: "  "
       })
-      bodyEl = <HighlightCode downloadable fileName={`${downloadName}.xml`} value={ body } />
+      bodyEl = <HighlightCode value={ body } />
 
       // HTML or Plain Text
     } else if (lowerCase(contentType) === "text/html" || /text\/plain/.test(contentType)) {
-      bodyEl = <HighlightCode downloadable fileName={`${downloadName}.html`} value={ content } />
+      bodyEl = <HighlightCode value={ content } />
 
       // Image
     } else if (/^image\//i.test(contentType)) {
@@ -125,25 +92,10 @@ export default class ResponseBody extends React.PureComponent {
     } else if (/^audio\//i.test(contentType)) {
       bodyEl = <pre><audio controls><source src={ url } type={ contentType } /></audio></pre>
     } else if (typeof content === "string") {
-      bodyEl = <HighlightCode downloadable fileName={`${downloadName}.txt`} value={ content } />
+      bodyEl = <HighlightCode value={ content } />
     } else if ( content.size > 0 ) {
       // We don't know the contentType, but there was some content returned
-      if(parsedContent) {
-        // We were able to squeeze something out of content
-        // in `updateParsedContent`, so let's display it
-        bodyEl = <div>
-          <p className="i">
-            Unrecognized response type; displaying content as text.
-          </p>
-          <HighlightCode downloadable fileName={`${downloadName}.txt`} value={ parsedContent } />
-        </div>
-
-      } else {
-        // Give up
-        bodyEl = <p className="i">
-          Unrecognized response type; unable to display.
-        </p>
-      }
+      bodyEl = <div>Unknown response type</div>
     } else {
       // We don't know the contentType and there was no content returned
       bodyEl = null

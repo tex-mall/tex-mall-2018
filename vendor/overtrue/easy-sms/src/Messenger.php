@@ -12,6 +12,7 @@
 namespace Overtrue\EasySms;
 
 use Overtrue\EasySms\Contracts\MessageInterface;
+use Overtrue\EasySms\Exceptions\GatewayErrorException;
 use Overtrue\EasySms\Exceptions\NoGatewayAvailableException;
 use Overtrue\EasySms\Support\Config;
 
@@ -77,16 +78,13 @@ class Messenger
                 $isSuccessful = true;
 
                 break;
-            } catch (\Throwable $e) {
+            } catch (GatewayErrorException $e) {
                 $results[$gateway] = [
                     'status' => self::STATUS_FAILURE,
                     'exception' => $e,
                 ];
-            } catch (\Exception $e) {
-                $results[$gateway] = [
-                    'status' => self::STATUS_FAILURE,
-                    'exception' => $e,
-                ];
+
+                continue;
             }
         }
 

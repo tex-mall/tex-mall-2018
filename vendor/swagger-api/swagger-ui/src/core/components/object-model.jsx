@@ -15,7 +15,6 @@ export default class ObjectModel extends Component {
     onToggle: PropTypes.func,
     specSelectors: PropTypes.object.isRequired,
     name: PropTypes.string,
-    displayName: PropTypes.string,
     isRef: PropTypes.bool,
     expandDepth: PropTypes.number,
     depth: PropTypes.number,
@@ -23,7 +22,7 @@ export default class ObjectModel extends Component {
   }
 
   render(){
-    let { schema, name, displayName, isRef, getComponent, getConfigs, depth, onToggle, expanded, specPath, ...otherProps } = this.props
+    let { schema, name, isRef, getComponent, getConfigs, depth, onToggle, expanded, specPath, ...otherProps } = this.props
     let { specSelectors,expandDepth } = otherProps
     const { isOAS3 } = specSelectors
 
@@ -36,7 +35,7 @@ export default class ObjectModel extends Component {
     let description = schema.get("description")
     let properties = schema.get("properties")
     let additionalProperties = schema.get("additionalProperties")
-    let title = schema.get("title") || displayName || name
+    let title = schema.get("title") || name
     let requiredProperties = schema.get("required")
 
     const JumpToPath = getComponent("JumpToPath", true)
@@ -79,7 +78,7 @@ export default class ObjectModel extends Component {
             {
               <table className="model"><tbody>
               {
-                !description ? null : <tr style={{ color: "#666", fontStyle: "italic" }}>
+                !description ? null : <tr style={{ color: "#999", fontStyle: "italic" }}>
                     <td>description:</td>
                     <td>
                       <Markdown source={ description } />

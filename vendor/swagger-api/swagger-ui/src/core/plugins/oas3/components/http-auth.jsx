@@ -33,8 +33,7 @@ export default class HttpAuth extends React.Component {
     let { onChange } = this.props
     let { value, name } = e.target
 
-    let newValue = Object.assign({}, this.state.value)
-
+    let newValue = this.state.value || {}
     if(name) {
       newValue[name] = value
     } else {
@@ -54,7 +53,7 @@ export default class HttpAuth extends React.Component {
     const Markdown = getComponent( "Markdown" )
     const JumpToPath = getComponent("JumpToPath", true)
 
-    const scheme = (schema.get("scheme") || "").toLowerCase()
+    const scheme = schema.get("scheme")
     let value = this.getValue()
     let errors = errSelectors.allErrors().filter( err => err.get("authId") === name)
 
@@ -126,7 +125,7 @@ export default class HttpAuth extends React.Component {
     )
     }
   return <div>
-    <em><b>{name}</b> HTTP authentication: unsupported scheme {`'${scheme}'`}</em>
+    <em><b>{name}</b> HTTP authentication: unsupported or missing scheme</em>
   </div>
   }
 }
