@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Shopuser;
+use App\Transformers\AgentUserTransformer;
+use App\Transformers\ShopuserTransformer;
+use App\UsersAgent;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\v1\ApiController;
 use App\Fav;
@@ -134,11 +138,16 @@ class MeController extends ApiController
 
 		$user_id = $this->user()->id;
 
+		$is_agent = Shopuser::where('user_id', $user_id)->where('status', 1)->count();
+		if ($is_agent) {
+		    $this->errorCustom('', '经办人没有账号');
+        }
+
 		$max = \DB::select("select max(id) as id from acclogs group by shop_id");
 
 		$max = collect($max)->pluck('id')->toArray();
 
-		$acclogs = Acclog::whereIn('id', $max)->with('shop')->get();
+		$acclogs = Acclog::where('user_id', $user_id)->whereIn('id', $max)->with('shop')->get();
 
 		return $this->response->collection($acclogs, new AcclogShopTransformer());
 	}
@@ -191,7 +200,16 @@ class MeController extends ApiController
 		return $this->response->noContent();
 	}
 
-	//
+	/**
+     * 经办人下面的用户
+     */
+	public function getAgentUser()
+    {
+        $user_id = $this->user()->id;
+        $users = UsersAgent::where('agent_user_id', $user_id)->with('user')->get();
+
+        return $this->response->collection($users, new AgentUserTransformer());
+    }
 
 
 

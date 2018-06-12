@@ -208,7 +208,8 @@ $api->version('v1', ['namespace'=> 'App\Http\Controllers\Api\v1'], function ($ap
          $api->post('company/sku/{id}/del', 'CompanyController@postCompanySkuDel');
          //66 获取产品标签
 
-         //经办人todo
+         //67经办人下用户
+        $api->post('me/getAgentUser', 'MeController@getAgentUser');
     });
 });
 

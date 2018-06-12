@@ -24,7 +24,10 @@ class CompanyController extends ApiController
 	{
 		$user_id = $this->user()->id;
 
-		$users = Shopuser::where('shop_id', $user_id)->with('user')->get();
+		$users = Shopuser::where('shop_id', $user_id)
+            ->where('status', 1)
+            ->with('user')
+            ->get();
 
 		return $this->response->collection($users, new ShopuserTransformer());
 	}

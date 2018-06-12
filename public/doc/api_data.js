@@ -3100,8 +3100,15 @@ define({ "api": [
             "group": "Success 200",
             "type": "Boolean",
             "optional": false,
-            "field": "admin",
-            "description": "<p>1是 0否.</p>"
+            "field": "is_admin",
+            "description": "<p>是否是店铺管理员1是 0否.</p>"
+          },
+          {
+              "group": "Success 200",
+              "type": "Boolean",
+              "optional": false,
+              "field": "is_agent",
+              "description": "<p>是否是经办人1是 0否.</p>"
           }
         ]
       }
@@ -3121,6 +3128,69 @@ define({ "api": [
       }
     ]
   },
+    {
+        "type": "post",
+        "url": "/me/getAgentUser",
+        "title": "经办人下面的用户",
+        "version": "0.1.0",
+        "name": "getAgentUser",
+        "group": "Me",
+        "examples": [
+            {
+                "title": "Example usage:",
+                "content": "curl -i http://localhost/me/getAgentUser",
+                "type": "json"
+            }
+        ],
+        "success": {
+            "fields": {
+                "Success 200": [
+                    {
+                        "group": "Success 200",
+                        "type": "String",
+                        "optional": false,
+                        "field": "id",
+                        "description": "<p>用户ID.</p>"
+                    },
+                    {
+                        "group": "Success 200",
+                        "type": "String",
+                        "optional": false,
+                        "field": "phone",
+                        "description": "<p>手机号码.</p>"
+                    },
+                    {
+                        "group": "Success 200",
+                        "type": "String",
+                        "optional": false,
+                        "field": "name",
+                        "description": "<p>用户名.</p>"
+                    },
+                    {
+                        "group": "Success 200",
+                        "type": "String",
+                        "optional": false,
+                        "field": "avatar",
+                        "description": "<p>头像.</p>"
+                    }
+                ]
+            }
+        },
+        "permission": [
+            {
+                "name": "admin",
+                "title": "登录授权.",
+                "description": "<p>需要用户登录授权访问</p>"
+            }
+        ],
+        "filename": "doc/me.js",
+        "groupTitle": "Me",
+        "sampleRequest": [
+            {
+                "url": "http://47.96.155.221/api/me/info"
+            }
+        ]
+    },
   {
     "type": "post",
     "url": "/me/acclog",
