@@ -3187,7 +3187,7 @@ define({ "api": [
         "groupTitle": "Me",
         "sampleRequest": [
             {
-                "url": "http://47.96.155.221/api/me/info"
+                "url": "http://tex-mall.wenjoying.com/api/me/getAgentUser"
             }
         ]
     },
